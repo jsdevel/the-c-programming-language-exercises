@@ -19,6 +19,7 @@ void printhhistogram(int maxwordlength, int histogram[]) {
 
     for (int j = 0; j < len ; ++j) {
       printf(WHITE_SQUARE);
+      printf(SPACE);
     }
 
     printf("\n");
@@ -92,6 +93,9 @@ int main() {
     if (c == EOF) {
       if (inword) {
         printf("\n");
+        ++histogram[wl];
+        wl = 0;
+        inword = OUT;
       }
       break;
     }
