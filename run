@@ -10,7 +10,7 @@ filePath="$PWD/$1"
 if [[ -f "$filePath" ]]; then
   outputFilePath="$PWD/`basename $filePath .c`"
   gcc -o "$outputFilePath" "$filePath"
-  cat <&0 | $outputFilePath
+  $outputFilePath <&0
   rm "$outputFilePath"
 else
   echo "The following file does not exist: $file"
