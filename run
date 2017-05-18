@@ -13,6 +13,13 @@ if [[ -f "$filePath" ]]; then
   $outputFilePath <&0
   if [ "$?" != '0' ];then
     gdb "$outputFilePath"
+  else
+    read -s -p "Program exited without errors, type 'd' to debug or [Enter] to close:" decision
+    if [[ "$decision" == 'd' ]]; then
+      gdb "$outputFilePath"
+    else
+      echo ''
+    fi
   fi
   rm "$outputFilePath"
 else
