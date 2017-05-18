@@ -3,7 +3,6 @@
 #include <string.h>
 
 #define INITIAL_SIZE 20
-#define MINIMUM_LINE_LENGTH 0
 #define NON_SPACE_CHARACTERS 33
 
 char *initialize();
@@ -19,16 +18,24 @@ int main()
   while (1) {
     len = _getline(&line, INITIAL_SIZE);
 
-    if (len > 0) {
-      len = trim(&line);
-    }
-
     if (len == EOF) {
       break;
     }
 
-    if (len > MINIMUM_LINE_LENGTH) {
-      printf("%s", line);
+    // printf("len: %d\n", len);
+
+    if (len > 0) {
+      len = trim(&line);
+      // printf("len after trim: %d\n", len);
+    }
+
+    if (len) {
+      printf("%s\n", line);
+    }
+
+    if (line != NULL) {
+      free(line);
+      line = NULL;
     }
   }
 
@@ -57,7 +64,14 @@ int _getline(char **line, int size)
 {
   int c, i;
 
-  char * nline = initialize();
+  char * nline;
+
+  if (*line == NULL) {
+    nline = initialize();
+  } else {
+    nline = *line;
+  }
+  nline[0] = '\0';
 
   c = getchar();
 
@@ -92,24 +106,25 @@ int trim(char **line) {
   }
 
   for (int i = 0; i < len; ++i) {
-    if (string[i] > NON_SPACE_CHARACTERS) {
+    if (string[i] >= NON_SPACE_CHARACTERS) {
       firstc = i;
+      break;
     }
   }
 
   for (int i = len; i > 0; --i) {
-    if (string[i - 1] > NON_SPACE_CHARACTERS) {
+    if (string[i - 1] >= NON_SPACE_CHARACTERS) {
         lastc = i - 1;
+        break;
     }
   }
 
   int j = 0;
-  for (int i = firstc; i <= lastc; ++i, ++j) {
+  for (int i = firstc; i <= lastc; ++i) {
     string[j] = string[i];
+    ++j;
   }
   string[j] = '\0';
 
-  *line = string;
-
-  return j - 1;
+  return j;
 }
